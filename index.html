@@ -24,13 +24,24 @@
 				this.maxFrame = maxFrame;
 				this.nowFrame = 0;//当前帧数
 
-				this.speed = 0;//鱼游动的速度
+				this.speed = Math.random() * 2 + 1;//鱼游动的速度
+
+				this.rotate = 0;//鱼游动的角度
 			};
 			//绘制鱼
 			Fish.prototype.draw = function(gd){
+				gd.save();
+				gd.translate(this.x, this.y);
+				gd.rotate(util.d2a(this.rotate));
+				if(Math.abs(this.rotate) >= 90){//如果角度的绝对值大于90度 那么就翻转
+					gd.scale(1, -1);
+				}
 				//剪切图像，并在画布上定位被剪切的部分：context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
 				//规定要使用的图像,开始剪切的 x 坐标位置,开始剪切的 y 坐标位置,被剪切图像的宽度,被剪切图像的高度,在画布上放置图像的 x 坐标位置,在画布上放置图像的 y 坐标位置,要使用的图像的宽度,要使用的图像的高度
-				gd.drawImage(this.img, 0, this.nowFrame*this.h, this.w, this.h, this.x - this.w/2, this.y - this.h/2, this.w, this.h);
+				// gd.drawImage(this.img, 0, this.nowFrame*this.h, this.w, this.h, this.x - this.w/2, this.y - this.h/2, this.w, this.h);
+				gd.drawImage(this.img, 0, this.nowFrame*this.h, this.w, this.h, -this.w/2, -this.h/2, this.w, this.h);
+
+				gd.restore();
 			};
 			//鱼的换图动作
 			Fish.prototype.nextFrame = function(){
@@ -41,32 +52,52 @@
 			};
 			//鱼的移动
 			Fish.prototype.move = function(){
-				this.x += this.speed;
+				//三角函数
+				//y=sin(a)*speed
+				//x=cos(a)*speed
+				this.x += Math.cos(util.d2a(this.rotate)) * this.speed;
+				this.y += Math.sin(util.d2a(this.rotate)) * this.speed;
 			};
 
 			//加载
 			document.addEventListener('DOMContentLoaded', function(){
 				var oBox = document.getElementById('playBox');//游戏盒子
 				var gd = oBox.getContext('2d');//用来绘制元素
+
+				var aFish = [];//用来存放鱼元素
 				//加载图片
-				util.loadImages(['fish1.png', 'fish2.png'], function(imgs){
+				util.loadImages(material.img, function(imgs){
 					//加载成功
-					var f1 = new Fish(imgs.fish1, 55, 37, 4);
-					f1.x=100;
-					f1.y=100;
-					f1.speed = Math.random() * 2 + 1;
+					for(var i = 0; i < 100; i++){
+						var oF = new Fish(imgs.fish1, 55, 37, 4);
+						if(Math.random() < 0.5){
+							//鱼从左面出来
+							oF.x = 100;
+							oF.rotate = Math.random() * 120 - 60;//[-60,60)
+						}else{
+							//鱼从右面出来
+							oF.x = oBox.width - 100;
+							oF.rotate = Math.random() * 120 - 240;//[-240,120)
+						}
+						oF.y = Math.random() * oBox.height;
+						aFish.push(oF);
+					}
 					//两个定时器 一个处理换图 一个处理移动绘制
 					//绘制
 					setInterval(function(){
 						//清除画布
 						gd.clearRect(0, 0, oBox.width, oBox.height);
 						//绘制鱼
-						f1.move();
-						f1.draw(gd);
+						for (var i = 0; i < aFish.length; i++) {
+							aFish[i].move();
+							aFish[i].draw(gd);
+						};
 					}, 16);
 					//换图
 					setInterval(function(){
-						f1.nextFrame();
+						for(var i = 0; i < aFish.length; i++){
+							aFish[i].nextFrame();
+						}
 					}, 150);
 
 				}, function(){

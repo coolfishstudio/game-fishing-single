@@ -21,7 +21,14 @@ var util = {
 			_oImg.src = 'images/' + arr[i];
 		};
 	},
-
+	//弧度转角度
+	d2a : function(n){
+		return n * Math.PI / 180;
+	},
+	//角度转弧度
+	a2d : function(n){
+		return n * 180 / Math.PI;
+	}
 
 
 };
