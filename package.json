@@ -1,0 +1,19 @@
+{
+  "name": "game-fishing-single",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "main": "app",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:coolfishstudio/game-fishing-single.git"
+  },
+  "author": {
+    "name": "coolfishstudio",
+    "email": "461836324@qq.com"
+  },
+  "dependencies": {
+  }
+}
