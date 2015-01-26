@@ -214,6 +214,16 @@
 						//绘制炮体
 						cannon.draw(gd);
 
+						for(var i = 0; i < aFish.length; i++){
+							for(var j = 0; j < aBull.length; j++){
+								if(util.isNotCollision(aFish[i], aBull[j])){
+									aFish.splice(i--, 1);
+									aBull.splice(j--, 1);
+									break;
+								}
+							}
+						}
+
 					}, 16);
 					//换图
 					setInterval(function(){
