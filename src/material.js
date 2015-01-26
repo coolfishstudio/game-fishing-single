@@ -20,6 +20,8 @@ var material = {
 		'energyBar.png',//213	19	
 		'cannonMinus.png',//44	31
 		'cannonPlus.png',//44	31
+		'cannonMinusDown.png',//44	31
+		'cannonPlusDown.png',//44	31
 		//炮体
 		'cannon1.png',	//74	74
 		'cannon2.png',	//74	76
@@ -28,6 +30,8 @@ var material = {
 		'cannon5.png',	//74	85
 		'cannon6.png',	//74	90
 		'cannon7.png',	//74	94
+		//炮弹
+		'bullet.png'
 
 	],
 	//音乐

@@ -20,8 +20,12 @@
 				var oBox = document.getElementById('playBox');//游戏盒子
 				var gd = oBox.getContext('2d');//用来绘制元素
 				var fish_padding = 520;
+				var bull_padding = 100;
 				var aFish = [];//用来存放鱼元素
 				var aBull = [];//用来存放炮弹的
+				var oNum = 0;//记录当前是第几个炮体
+				var oPBtn = false;//记录按钮是否被点击
+				var oMBtn = false;//记录按钮是否被点击
 
 				//加载图片
 				util.loadImages(material.img, function(imgs){
@@ -31,16 +35,34 @@
 						{img : imgs.fish2, w : 78, h : 64, m : 4},
 						{img : imgs.fish3, w : 72, h : 56, m : 4},
 						{img : imgs.fish4, w : 77, h : 59, m : 4},
-						{img : imgs.fish5, w : 107, h : 122, m : 4}
-						// {img : imgs.fish6, w : 105, h : 79, m : 8},
-						// {img : imgs.fish7, w : 92, h : 151, m : 6},
-						// {img : imgs.fish8, w : 174, h : 126, m : 8},
-						// {img : imgs.fish9, w : 166, h : 183, m : 8},
-						// {img : imgs.fish10, w : 178, h : 187, m : 6},
-						// {img : imgs.shark1, w : 509, h : 270, m : 8},
-						// {img : imgs.shark2, w : 516, h : 273, m : 8}
+						{img : imgs.fish5, w : 107, h : 122, m : 4},
+						{img : imgs.fish6, w : 105, h : 79, m : 8},
+						{img : imgs.fish7, w : 92, h : 151, m : 6},
+						{img : imgs.fish8, w : 174, h : 126, m : 8},
+						{img : imgs.fish9, w : 166, h : 183, m : 8},
+						{img : imgs.fish10, w : 178, h : 187, m : 6},
+						{img : imgs.shark1, w : 509, h : 270, m : 8},
+						{img : imgs.shark2, w : 516, h : 273, m : 8}
 					];
-
+					var cannons = [
+						{img:imgs.cannon1, w: 74, h: 74},
+						{img:imgs.cannon2, w: 74, h: 76},
+						{img:imgs.cannon3, w: 74, h: 76},
+						{img:imgs.cannon4, w: 74, h: 83},
+						{img:imgs.cannon5, w: 74, h: 85},
+						{img:imgs.cannon6, w: 74, h: 90},
+						{img:imgs.cannon7, w: 74, h: 94},
+					];
+					var bulls = [
+						{img : imgs.bullet, sx : 86, sy : 0, w : 24, h : 26},
+						{img : imgs.bullet, sx : 61, sy : 0, w : 25, h : 29},
+						{img : imgs.bullet, sx : 32, sy : 35, w : 27, h : 31},
+						{img : imgs.bullet, sx : 30, sy : 82, w : 29, h : 33},
+						{img : imgs.bullet, sx : 0, sy : 82, w : 30, h : 34},
+						{img : imgs.bullet, sx : 30, sy : 0, w : 31, h : 35},
+						{img : imgs.bullet, sx : 0, sy : 44, w : 32, h : 38},
+						{img : imgs.bullet, sx : 0, sy : 0, w : 30, h : 44}
+					];
 
 					//点击事件
 					document.onclick = function(ev){
@@ -50,15 +72,44 @@
 						var y1 = ev.pageY - oBox.offsetTop;
 						console.log(x1,y1);
 						if(x1 > 87 && x1 < 850 && y1 < oBox.height && y1 > oBox.height - 40){
-
+							//左侧按钮 433 467    671 695
+							if(x1 < 467 && x1 > 433 && y1 < 695 && y1 > 671){
+								oNum--;
+								if(oNum < 0){
+									oNum = 6;
+								}
+								oMBtn = true;
+							}
+							//右侧按钮 557 591 	671 695
+							if(x1 < 591 && x1 > 557 && y1 < 695 && y1 > 671){
+								oNum++;
+								if(oNum > 6){
+									oNum = 0;
+								}
+								console.log(oNum);
+								oPBtn = true;
+							}
+							//绘制新炮体
+							_cannon = cannons[oNum];					
+							cannon = new Cannon(_cannon.img, _cannon.w, _cannon.h, 5);
+							cannon.x = 512;
+							cannon.y = oBox.height - 30;
 						}else{
-							//旋转炮塔
+							//旋转炮体
 							var x2 = cannon.x;
 							var y2 = cannon.y;
 							var x = x1 - x2;
 							var y = y1 - y2;
 							var a = Math.atan2(y, x);
 							cannon.rotate = util.a2d(a) + 90;
+
+							//创建炮弹
+							var _bull = bulls[oNum];
+							var bullet = new Bullet(_bull.img, _bull.sx, _bull.sy, _bull.w, _bull.h);
+							bullet.x = cannon.x;
+							bullet.y = cannon.y;
+							bullet.rotate = cannon.rotate;
+							aBull.push(bullet);
 						}
 					};
 
@@ -69,7 +120,8 @@
 					//出现下一只鱼
 					function nextFish(){
 						setTimeout(function(){
-							var _fish = fishs[Math.floor(Math.random() * fishs.length)];
+							// var _fish = fishs[Math.floor(Math.random() * fishs.length)];
+							var _fish = fishs[util.getOdds(parseInt(Math.random() * 100))];
 							var oF = new Fish(_fish.img, _fish.w, _fish.h, _fish.m);
 							if(Math.random() < 0.5){
 								//鱼从左面出来
@@ -87,7 +139,8 @@
 					}
 					nextFish();
 					//定义炮体
-					var cannon = new Cannon(imgs.cannon7, 74, 94, 5);
+					var _cannon = cannons[oNum];
+					var cannon = new Cannon(_cannon.img, _cannon.w, _cannon.h, 5);
 					cannon.x = 512;
 					cannon.y = oBox.height - 30;
 
@@ -104,10 +157,18 @@
 					var cannonMinus = new Play(imgs.cannonMinus, 44, 31);
 					cannonMinus.x = 450;
 					cannonMinus.y = oBox.height - 20;
+					var cannonMinusDown = new Play(imgs.cannonMinusDown, 44, 31);
+					cannonMinusDown.x = 450;
+					cannonMinusDown.y = oBox.height - 20;
 					//定义增加按钮
 					var cannonPlus = new Play(imgs.cannonPlus, 44, 31);
 					cannonPlus.x = 575;
 					cannonPlus.y = oBox.height - 20;
+					var cannonPlusDown = new Play(imgs.cannonPlusDown, 44, 31);
+					cannonPlusDown.x = 575;
+					cannonPlusDown.y = oBox.height - 20;
+
+
 
 					//两个定时器 一个处理换图 一个处理移动绘制
 					//绘制
@@ -128,9 +189,29 @@
 						//绘制组件
 						bottomBar.draw(gd);
 						energyBar.draw(gd);
-						cannonMinus.draw(gd);
-						cannonPlus.draw(gd);
-						//画炮
+						if(oMBtn){
+							cannonMinusDown.draw(gd);
+							oMBtn = false;
+						}else{
+							cannonMinus.draw(gd);
+						}
+						if(oPBtn){
+							cannonPlusDown.draw(gd);
+							oPBtn = false;
+						}else{
+							cannonPlus.draw(gd);
+						}
+						//绘制炮弹
+						for(var i = 0; i < aBull.length; i++){
+							if(util.isNotInScreen(oBox.width, oBox.height, aBull[i], bull_padding)){
+								aBull.splice(i--, 1);
+								continue;
+							}
+							aBull[i].move();
+							aBull[i].draw(gd);
+						}
+
+						//绘制炮体
 						cannon.draw(gd);
 
 					}, 16);
