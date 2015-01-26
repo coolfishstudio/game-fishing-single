@@ -28,6 +28,14 @@ var util = {
 	//角度转弧度
 	a2d : function(n){
 		return n * 180 / Math.PI;
+	},
+	//判断鱼是否出去
+	isNotInScreen : function(W, H, obj, padding){
+		if(obj.x < -padding || obj.x > W + padding || obj.y < -padding || obj.y > H + padding){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 

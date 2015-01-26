@@ -12,8 +12,22 @@ var material = {
 		'fish8.png',	//174	126		8		4
 		'fish9.png',	//166	183		8		4
 		'fish10.png',	//178	187		6 		4
+		//鲨鱼
 		'shark1.png',	//509	270		8		4
-		'shark2.png'	//516	273		8		4
+		'shark2.png',	//516	273		8		4
+		//组件
+		'bottomBar.png',//765	71
+		'energyBar.png',//213	19	
+		'cannonMinus.png',//44	31
+		'cannonPlus.png',//44	31
+		//炮体
+		'cannon1.png',	//74	74
+		'cannon2.png',	//74	76
+		'cannon3.png',	//74	76
+		'cannon4.png',	//74	83
+		'cannon5.png',	//74	85
+		'cannon6.png',	//74	90
+		'cannon7.png',	//74	94
 
 	],
 	//音乐
