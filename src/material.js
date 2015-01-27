@@ -36,8 +36,9 @@ var material = {
 		'coinAni1.png',	//60	60
 		'coinAni2.png',	//60	60
 		//数字
-		'coinText.png'
-
+		'coinText.png',
+		//渔网
+		'web.png'
 	],
 	//音乐
 	music : []

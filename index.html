@@ -17,7 +17,7 @@
 		<script type="text/javascript" src="src/Coin.js"></script><!-- 金币元素 -->
 		<script type="text/javascript" src="src/CoinText.js"></script><!-- 金币数字元素 -->
 		<script type="text/javascript" src="src/DeadFish.js"></script><!-- 死鱼元素 -->
-
+		<script type="text/javascript" src="src/Web.js"></script><!-- 渔网元素 -->
 
 		<script type="text/javascript">
 			//加载
@@ -34,7 +34,7 @@
 				var aCoin = [];//用来存放金币元素
 				var aCoinText = [];//用来存放金币数字元素
 				var aDeadFish = [];//用来存放死鱼元素
-
+				var aWeb = [];//用来存放渔网元素
 				//加载图片
 				util.loadImages(material.img, function(imgs){
 					//加载成功
@@ -88,7 +88,15 @@
 						'9' : {img:imgs.coinText, sx: 324, w: 36, h: 49},//9
 						'x' : {img:imgs.coinText, sx: 360, w: 36, h: 49}//x
 					};
-
+					var webs = [
+						{img : imgs.web, sx : 319, sy : 355, w : 116, h : 118},
+						{img : imgs.web, sx : 0, sy : 399, w : 137, h : 142},
+						{img : imgs.web, sx : 163, sy : 355, w : 156, h : 162},
+						{img : imgs.web, sx : 242, sy : 181, w : 180, h : 174},
+						{img : imgs.web, sx : 0, sy : 244, w : 163, h : 155},
+						{img : imgs.web, sx : 242, sy : 0, w : 191, h : 181},
+						{img : imgs.web, sx : 0, sy : 0, w : 242, h : 244},
+					];
 					//点击事件
 					document.onclick = function(ev){
 						//控制面板的位置
@@ -212,6 +220,15 @@
 						for(var i = 0; i < aDeadFish.length; i++){
 							aDeadFish[i].draw(gd);
 						}
+						//绘制渔网
+						for(var i = 0; i < aWeb.length; i++){
+							aWeb[i].scale += 0.05;
+							aWeb[i].draw(gd);
+							if(aWeb[i].scale >= 1){
+								aWeb.splice(i--, 1);
+							}
+						}
+
 						//绘制金币
 						for(var i = 0; i < aCoin.length; i++){
 							if(aCoin[i].x >= aCoin[i].targetX - 50 && aCoin[i].x <= aCoin[i].targetX + 50 && aCoin[i].y >= aCoin[i].targetY - 30 && aCoin[i].y <= aCoin[i].targetY + 30){
@@ -261,6 +278,10 @@
 						for(var i = 0; i < aFish.length; i++){
 							for(var j = 0; j < aBull.length; j++){
 								if(util.isNotCollision(aFish[i], aBull[j])){
+									//渔网
+									var _web = webs[oNum];
+									var oWeb = new Web(_web.img, _web.w, _web.h, aBull[j].x, aBull[j].y, _web.sx, _web.sy);
+									aWeb.push(oWeb);
 									//生成金币
 									var _coinText = aFish[i].c + 'x';
 									if(aFish[i].c < 10){
