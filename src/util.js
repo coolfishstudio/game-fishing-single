@@ -80,7 +80,7 @@ var util = {
 	//捕鱼概率
 	randomFish : function(m, n){//m 炮弹 n 鱼
 		var randomNum = Math.random();//[0,1)
-		var getNum = 0.1 + (m - n) * 0.005;
+		var getNum = 0.05 + (m - n) * 0.0005;
 		if(getNum > randomNum){
 			return true;
 		}else{
