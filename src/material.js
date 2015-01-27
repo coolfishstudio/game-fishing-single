@@ -31,7 +31,12 @@ var material = {
 		'cannon6.png',	//74	90
 		'cannon7.png',	//74	94
 		//炮弹
-		'bullet.png'
+		'bullet.png',
+		//金币
+		'coinAni1.png',	//60	60
+		'coinAni2.png',	//60	60
+		//数字
+		'coinText.png'
 
 	],
 	//音乐
