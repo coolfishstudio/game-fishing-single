@@ -16,6 +16,8 @@
 		<script type="text/javascript" src="src/Bullet.js"></script><!-- 炮弹元素 -->
 		<script type="text/javascript" src="src/Coin.js"></script><!-- 金币元素 -->
 		<script type="text/javascript" src="src/CoinText.js"></script><!-- 金币数字元素 -->
+		<script type="text/javascript" src="src/DeadFish.js"></script><!-- 死鱼元素 -->
+
 
 		<script type="text/javascript">
 			//加载
@@ -31,6 +33,7 @@
 				var oMBtn = false;//记录按钮是否被点击
 				var aCoin = [];//用来存放金币元素
 				var aCoinText = [];//用来存放金币数字元素
+				var aDeadFish = [];//用来存放死鱼元素
 
 				//加载图片
 				util.loadImages(material.img, function(imgs){
@@ -197,7 +200,6 @@
 						//清除画布
 						gd.clearRect(0, 0, oBox.width, oBox.height);
 						//绘制鱼
-						
 						for(var i = 0; i < aFish.length; i++){
 							if(util.isNotInScreen(oBox.width, oBox.height, aFish[i], fish_padding)){
 								aFish.splice(i--, 1);
@@ -206,6 +208,10 @@
 							aFish[i].move();
 							aFish[i].draw(gd);
 						};
+						//绘制死鱼
+						for(var i = 0; i < aDeadFish.length; i++){
+							aDeadFish[i].draw(gd);
+						}
 						//绘制金币
 						for(var i = 0; i < aCoin.length; i++){
 							if(aCoin[i].x >= aCoin[i].targetX - 50 && aCoin[i].x <= aCoin[i].targetX + 50 && aCoin[i].y >= aCoin[i].targetY - 30 && aCoin[i].y <= aCoin[i].targetY + 30){
@@ -270,6 +276,23 @@
 										var oCoinText = new CoinText(_coinTextAt.img, _coinTextAt.sx, 0, aFish[i].x + 36 * t, aFish[i].y, _coinTextAt.w, _coinTextAt.h, aFish[i].x + 36 * t, aFish[i].y - 50);
 										aCoinText.push(oCoinText);
 									}
+									//生成死鱼
+									var oDeadFish = new DeadFish(aFish[i].img, aFish[i].w, aFish[i].h, aFish[i].maxFrame, 4);
+									oDeadFish.x = aFish[i].x;
+									oDeadFish.y = aFish[i].y;
+									oDeadFish.rotate = aFish[i].rotate;
+									aDeadFish.push(oDeadFish);
+									(function(odf){
+										setTimeout(function(){
+											for(var i = 0; i < aDeadFish.length; i++){
+												if(aDeadFish[i] == odf){
+													aDeadFish.splice(i, 1);
+													break;
+												}
+											}
+										}, 500);
+									})(oDeadFish);
+									
 									aFish.splice(i--, 1);
 									aBull.splice(j--, 1);
 									break;
@@ -285,6 +308,9 @@
 						}
 						for(var i = 0; i < aCoin.length; i++){
 							aCoin[i].nextFrame();
+						}
+						for(var i = 0; i < aDeadFish.length; i++){
+							aDeadFish[i].nextFrame();
 						}
 						cannon.nextFrame();
 					}, 150);
