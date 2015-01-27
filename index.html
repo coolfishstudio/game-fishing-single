@@ -143,11 +143,6 @@
 							aBull.push(bullet);
 						}
 					};
-
-
-
-
-
 					//出现下一只鱼
 					function nextFish(){
 						setTimeout(function(){
@@ -175,8 +170,6 @@
 					var cannon = new Cannon(_cannon.img, _cannon.w, _cannon.h, 5);
 					cannon.x = 512;
 					cannon.y = oBox.height - 30;
-
-
 					//定义组件
 					var bottomBar = new Play(imgs.bottomBar, 765, 71);
 					bottomBar.x = 468;
@@ -222,7 +215,7 @@
 						}
 						//绘制渔网
 						for(var i = 0; i < aWeb.length; i++){
-							aWeb[i].scale += 0.05;
+							aWeb[i].scale += 0.04;
 							aWeb[i].draw(gd);
 							if(aWeb[i].scale >= 1){
 								aWeb.splice(i--, 1);
@@ -311,7 +304,7 @@
 													break;
 												}
 											}
-										}, 500);
+										}, 800);
 									})(oDeadFish);
 									
 									aFish.splice(i--, 1);
