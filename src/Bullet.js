@@ -1,6 +1,7 @@
 function Bullet(img, sx, sy, w, h){
 	this.x = 0;
 	this.y = 0;
+	this.num = 1;
 
 	this.img = img;
 	this.w = w;

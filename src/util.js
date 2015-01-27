@@ -67,10 +67,21 @@ var util = {
 	},
 	//判断两物体是否碰撞
 	isNotCollision : function(obj1, obj2){
+
 		var x = obj1.x - obj2.x;
 		var y = obj1.y - obj2.y;
 		var dis = Math.sqrt(x * x + y * y);
 		if(dis <= obj1.w/2 + obj2.w/2){
+			return true;
+		}else{
+			return false;
+		}
+	},
+	//捕鱼概率
+	randomFish : function(m, n){//m 炮弹 n 鱼
+		var randomNum = Math.random();//[0,1)
+		var getNum = 0.1 + (m - n) * 0.005;
+		if(getNum > randomNum){
 			return true;
 		}else{
 			return false;

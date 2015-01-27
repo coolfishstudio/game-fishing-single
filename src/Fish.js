@@ -2,6 +2,7 @@ function Fish(img, w, h, maxFrame){//图片,宽度,高度,最大帧数
 	this.x = 0;
 	this.y = 0;
 	this.c = 0;
+	this.num = 1;
 
 	this.img = img;
 	this.w = w;

@@ -139,6 +139,7 @@
 							var bullet = new Bullet(_bull.img, _bull.sx, _bull.sy, _bull.w, _bull.h);
 							bullet.x = cannon.x;
 							bullet.y = cannon.y;
+							bullet.num = oNum + 1;
 							bullet.rotate = cannon.rotate;
 							aBull.push(bullet);
 						}
@@ -147,7 +148,8 @@
 					function nextFish(){
 						setTimeout(function(){
 							// var _fish = fishs[Math.floor(Math.random() * fishs.length)];
-							var _fish = fishs[util.getOdds(parseInt(Math.random() * 100))];
+							var _fishNum = util.getOdds(parseInt(Math.random() * 100));
+							var _fish = fishs[_fishNum];
 							var oF = new Fish(_fish.img, _fish.w, _fish.h, _fish.m);
 							if(Math.random() < 0.5){
 								//鱼从左面出来
@@ -160,6 +162,7 @@
 							}
 							oF.y = Math.random() * oBox.height;
 							oF.c = _fish.c;
+							oF.num = _fishNum + 1;
 							aFish.push(oF);
 							nextFish();
 						}, Math.random() * 500);
@@ -275,39 +278,44 @@
 									var _web = webs[oNum];
 									var oWeb = new Web(_web.img, _web.w, _web.h, aBull[j].x, aBull[j].y, _web.sx, _web.sy);
 									aWeb.push(oWeb);
-									//生成金币
-									var _coinText = aFish[i].c + 'x';
-									if(aFish[i].c < 10){
-										var _coin = coins[0];
-									}else{
-										var _coin = coins[1];
-									}
-									var oCoin = new Coin(_coin.img, aFish[i].x, aFish[i].y, _coin.w, _coin.h, 160, 665, 10);
-									aCoin.push(oCoin);
-									//生成积分
-									for(var t = 0; t < _coinText.length; t++){
-										var _coinTextAt = coinTexts[_coinText.charAt(t)];
-										var oCoinText = new CoinText(_coinTextAt.img, _coinTextAt.sx, 0, aFish[i].x + 36 * t, aFish[i].y, _coinTextAt.w, _coinTextAt.h, aFish[i].x + 36 * t, aFish[i].y - 50);
-										aCoinText.push(oCoinText);
-									}
-									//生成死鱼
-									var oDeadFish = new DeadFish(aFish[i].img, aFish[i].w, aFish[i].h, aFish[i].maxFrame, 4);
-									oDeadFish.x = aFish[i].x;
-									oDeadFish.y = aFish[i].y;
-									oDeadFish.rotate = aFish[i].rotate;
-									aDeadFish.push(oDeadFish);
-									(function(odf){
-										setTimeout(function(){
-											for(var i = 0; i < aDeadFish.length; i++){
-												if(aDeadFish[i] == odf){
-													aDeadFish.splice(i, 1);
-													break;
+									for(var f = 0; f < aFish.length; f++){
+										for(var w = 0; w < aWeb.length; w++){
+											if(util.isNotCollision(aFish[f], aWeb[w]) && util.randomFish(aBull[j].num, aFish[f].num)){
+												//生成金币
+												var _coinText = aFish[f].c + 'x';
+												if(aFish[f].c < 10){
+													var _coin = coins[0];
+												}else{
+													var _coin = coins[1];
 												}
+												var oCoin = new Coin(_coin.img, aFish[f].x, aFish[f].y, _coin.w, _coin.h, 160, 665, 10);
+												aCoin.push(oCoin);
+												//生成积分
+												for(var t = 0; t < _coinText.length; t++){
+													var _coinTextAt = coinTexts[_coinText.charAt(t)];
+													var oCoinText = new CoinText(_coinTextAt.img, _coinTextAt.sx, 0, aFish[f].x + 36 * t, aFish[f].y, _coinTextAt.w, _coinTextAt.h, aFish[f].x + 36 * t, aFish[f].y - 50);
+													aCoinText.push(oCoinText);
+												}
+												//生成死鱼
+												var oDeadFish = new DeadFish(aFish[f].img, aFish[f].w, aFish[f].h, aFish[f].maxFrame, 4);
+												oDeadFish.x = aFish[f].x;
+												oDeadFish.y = aFish[f].y;
+												oDeadFish.rotate = aFish[f].rotate;
+												aDeadFish.push(oDeadFish);
+												(function(odf){
+													setTimeout(function(){
+														for(var i = 0; i < aDeadFish.length; i++){
+															if(aDeadFish[i] == odf){
+																aDeadFish.splice(i, 1);
+																break;
+															}
+														}
+													}, 800);
+												})(oDeadFish);
+												aFish.splice(f--, 1);
 											}
-										}, 800);
-									})(oDeadFish);
-									
-									aFish.splice(i--, 1);
+										}
+									}
 									aBull.splice(j--, 1);
 									break;
 								}
