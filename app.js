@@ -1,10 +1,10 @@
 var http = require('http'),
 	fs = require('fs');
 
-var port = 9281;//端口号
+var port = 3901;//端口号
 
 /*
-	这是一个简单的服务器 
+	这是一个简单的服务器
 	主要作用是 启动这个静态文件
 	只支持 加载png/js
 	默认跳转也面 只有首页
@@ -23,7 +23,10 @@ var server = http.createServer(function(req, res){
 		res.end('Not found');
 	}
 	function serve(path, type){
-		res.writeHead(200, {'Content-Type': type});
+		res.writeHead(200, {
+			'Content-Type': type,
+			'Access-Control-Allow-Origin': '*'
+		});
 		fs.createReadStream(path).pipe(res);
 	}
 	function getType(url){

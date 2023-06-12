@@ -18,7 +18,7 @@ var util = {
 					fnError && fnError();
 				};
 			})(i);
-			_oImg.src = 'images/' + arr[i];
+			_oImg.src = 'https://coolfishstudio.github.io/game-fishing-single/images/' + arr[i];
 		};
 	},
 	//弧度转角度
@@ -61,7 +61,7 @@ var util = {
 			return 9;
 		}else if(num < 99 && num > 96){ //2%
 			return 10;
-		}else if(num < 100 && num > 98){ //1%	
+		}else if(num < 100 && num > 98){ //1%
 			return 11;
 		}
 	},
